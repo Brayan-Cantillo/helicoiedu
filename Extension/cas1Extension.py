@@ -107,8 +107,7 @@ def case1Extension(data):
             'long_ganchos': exten_long_ganchos,
             'Lf': exten_Lf,
             'ymax': exten_ymax,
-            'Kb': exten_Kb,
-            'example': exten_Kb
+            'Kb': exten_Kb
         }
 
         # Validación de resultados.
