@@ -108,7 +108,7 @@ def case1Extension(data):
             'Lf': exten_Lf,
             'ymax': exten_ymax,
             'Kb': exten_Kb,
-            'kb_max': exten_Kb
+
         }
 
         # Validación de resultados.
