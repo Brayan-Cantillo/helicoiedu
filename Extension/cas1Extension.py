@@ -110,8 +110,6 @@ def case1Extension(data):
             'Kb': exten_Kb,
         }
 
-        # hp mlp Alfonso
-
         # Validación de resultados.
 
         if exten_Ns < 1:
