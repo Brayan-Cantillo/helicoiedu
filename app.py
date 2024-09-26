@@ -210,6 +210,43 @@ def obtener_diametros(material_id):
     return jsonify(resultado)  # Retorna los diámetros en formato JSON
 
 
+@app.route('/update_material/<int:id>', methods=['PUT'])
+def update_material(id):
+    data = request.get_json()
+
+    if not data or 'nombre' not in data or 'A' not in data or 'B' not in data or 'diametros' not in data:
+        return jsonify({'error': 'Datos inválidos'}), 400
+
+    material = Material.query.get(id)
+    if not material:
+        return jsonify({'error': 'ID de material no encontrado'}), 404
+
+    # Actualizar campos del material
+    material.nombre = data['nombre']
+    material.A = data['A']
+    material.B = data['B']
+
+    # Actualizar diámetros
+    diametros_data = data['diametros']
+    for diametro_data in diametros_data:
+        diametro = Diametro.query.get(diametro_data['id'])
+        if diametro:
+            diametro.nombre = diametro_data['nombre']
+            diametro.valor = diametro_data['valor']
+        else:
+            # Si no existe, puedes decidir si crear uno nuevo o ignorar
+            nuevo_diametro = Diametro(
+                nombre=diametro_data['nombre'], valor=diametro_data['valor'], material_id=id)
+            db.session.add(nuevo_diametro)
+
+    try:
+        db.session.commit()
+        return jsonify({'mensaje': 'Material y diámetros actualizados exitosamente'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/crear_tablas', methods=['POST'])
 def crear_tablas():
     db.create_all()
