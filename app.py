@@ -166,8 +166,10 @@ def obtener_materiales():
     return jsonify(resultado)  # Retorna los materiales en formato JSON
 
 
-def create_tables():
+@app.route('/crear_tablas', methods=['POST'])
+def crear_tablas():
     db.create_all()
+    return "Tablas creadas correctamente."
 
 
 if __name__ == '__main__':
