@@ -128,28 +128,57 @@ def calculate():
 
 @app.route('/insertar_datos', methods=['POST'])
 def insertar_datos():
-    # Crear algunos materiales
-    for _ in range(5):  # Cambia el rango según cuántos datos quieras
-        nombre_material = fake.unique.word()
-        A = random.uniform(1.0, 10.0)
-        B = random.uniform(1.0, 10.0)
-        nuevo_material = Material(nombre=nombre_material, A=A, B=B)
-        db.session.add(nuevo_material)
+    data = request.json  # Obtener el JSON del request
 
-    db.session.commit()
+    # Validar campos requeridos en el material
+    if not all(key in data for key in ('nombre', 'A', 'B', 'diametros')):
+        return jsonify({"error": "Faltan campos requeridos en el material."}), 400
 
-    # Crear algunos diámetros vinculados a los materiales
-    materiales = Material.query.all()
-    for _ in range(10):  # Cambia el rango según cuántos diámetros quieras
-        nombre_diametro = fake.word()
-        material_id = random.choice(materiales).id
+    # Validar que el material no exista
+    if Material.query.filter_by(nombre=data['nombre']).first():
+        return jsonify({"error": "El nombre del material ya existe."}), 400
+
+    # Crear nuevo material
+    nuevo_material = Material(nombre=data['nombre'], A=data['A'], B=data['B'])
+    db.session.add(nuevo_material)
+    db.session.commit()  # Guardar el material para obtener su ID
+
+    # Validar diámetros
+    diametro_nombres = set()  # Usar un conjunto para verificar duplicados
+    diametros_insertados = []  # Lista para almacenar los diámetros insertados
+    for diametro_data in data['diametros']:
+        # Validar campos requeridos en diámetros
+        if not all(key in diametro_data for key in ('nombre', 'valor')):
+            return jsonify({"error": "Faltan campos requeridos en un diámetro."}), 400
+
+        # Validar que el diámetro no exista
+        if diametro_data['nombre'] in diametro_nombres:
+            return jsonify({"error": f"El diámetro con nombre '{diametro_data['nombre']}' ya existe."}), 400
+        diametro_nombres.add(diametro_data['nombre'])
+
         nuevo_diametro = Diametro(
-            nombre=nombre_diametro, valor=random.uniform(1.0, 10.0), material_id=material_id)
+            nombre=diametro_data['nombre'], valor=diametro_data['valor'], material_id=nuevo_material.id)
         db.session.add(nuevo_diametro)
+        diametros_insertados.append({
+            'nombre': nuevo_diametro.nombre,
+            'valor': nuevo_diametro.valor
+        })
 
-    db.session.commit()
+    db.session.commit()  # Guardar los diámetros
 
-    return "Datos aleatorios insertados correctamente."
+    # Retornar los datos insertados
+    response_data = {
+        "message": "Datos insertados correctamente.",
+        "material": {
+            "id": nuevo_material.id,
+            "nombre": nuevo_material.nombre,
+            "A": nuevo_material.A,
+            "B": nuevo_material.B
+        },
+        "diametros": diametros_insertados
+    }
+
+    return jsonify(response_data), 201
 
 
 @app.route('/materiales', methods=['GET'])
@@ -166,18 +195,6 @@ def obtener_materiales():
     return jsonify(resultado)  # Retorna los materiales en formato JSON
 
 
-@app.route('/crear_tablas', methods=['POST'])
-def crear_tablas():
-    db.create_all()
-    return "Tablas creadas correctamente."
-
-
-@app.route('/eliminar_tablas', methods=['DELETE'])
-def eliminar_tablas():
-    db.drop_all()  # Esto eliminará todas las tablas
-    return "Todas las tablas han sido eliminadas."
-
-
 # Ruta para obtener diámetros según el material
 @app.route('/diametros/<int:material_id>', methods=['GET'])
 def obtener_diametros(material_id):
@@ -191,6 +208,18 @@ def obtener_diametros(material_id):
             'valor': diametro.valor
         })
     return jsonify(resultado)  # Retorna los diámetros en formato JSON
+
+
+@app.route('/crear_tablas', methods=['POST'])
+def crear_tablas():
+    db.create_all()
+    return "Tablas creadas correctamente."
+
+
+@app.route('/eliminar_tablas', methods=['DELETE'])
+def eliminar_tablas():
+    db.drop_all()  # Esto eliminará todas las tablas
+    return "Todas las tablas han sido eliminadas."
 
 
 if __name__ == '__main__':
