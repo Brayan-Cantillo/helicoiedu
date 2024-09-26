@@ -23,5 +23,6 @@ class Diametro(db.Model):
     __tablename__ = 'diametro'
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
+    valor = db.Column(db.Float, nullable=False)
     material_id = db.Column(db.Integer, db.ForeignKey(
         'material.id'), nullable=False)

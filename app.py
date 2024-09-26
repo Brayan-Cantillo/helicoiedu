@@ -126,30 +126,30 @@ def calculate():
         return result
 
 
-@app.route('/insertar_datos', methods=['POST'])
-def insertar_datos():
-    # Crear algunos materiales
-    for _ in range(5):  # Cambia el rango según cuántos datos quieras
-        nombre_material = fake.unique.word()
-        A = random.uniform(1.0, 10.0)
-        B = random.uniform(1.0, 10.0)
-        nuevo_material = Material(nombre=nombre_material, A=A, B=B)
-        db.session.add(nuevo_material)
+# @app.route('/insertar_datos', methods=['POST'])
+# def insertar_datos():
+#     # Crear algunos materiales
+#     for _ in range(5):  # Cambia el rango según cuántos datos quieras
+#         nombre_material = fake.unique.word()
+#         A = random.uniform(1.0, 10.0)
+#         B = random.uniform(1.0, 10.0)
+#         nuevo_material = Material(nombre=nombre_material, A=A, B=B)
+#         db.session.add(nuevo_material)
 
-    db.session.commit()
+#     db.session.commit()
 
-    # Crear algunos diámetros vinculados a los materiales
-    materiales = Material.query.all()
-    for _ in range(10):  # Cambia el rango según cuántos diámetros quieras
-        nombre_diametro = fake.word()
-        material_id = random.choice(materiales).id
-        nuevo_diametro = Diametro(
-            nombre=nombre_diametro, material_id=material_id)
-        db.session.add(nuevo_diametro)
+#     # Crear algunos diámetros vinculados a los materiales
+#     materiales = Material.query.all()
+#     for _ in range(10):  # Cambia el rango según cuántos diámetros quieras
+#         nombre_diametro = fake.word()
+#         material_id = random.choice(materiales).id
+#         nuevo_diametro = Diametro(
+#             nombre=nombre_diametro, material_id=material_id)
+#         db.session.add(nuevo_diametro)
 
-    db.session.commit()
+#     db.session.commit()
 
-    return "Datos aleatorios insertados correctamente."
+#     return "Datos aleatorios insertados correctamente."
 
 
 @app.route('/materiales', methods=['GET'])
@@ -170,6 +170,27 @@ def obtener_materiales():
 def crear_tablas():
     db.create_all()
     return "Tablas creadas correctamente."
+
+
+@app.route('/eliminar_tablas', methods=['DELETE'])
+def eliminar_tablas():
+    db.drop_all()  # Esto eliminará todas las tablas
+    return "Todas las tablas han sido eliminadas."
+
+
+# Ruta para obtener diámetros según el material
+@app.route('/diametros/<int:material_id>', methods=['GET'])
+def obtener_diametros(material_id):
+    # Obtener diámetros por material_id
+    diametros = Diametro.query.filter_by(material_id=material_id).all()
+    resultado = []
+    for diametro in diametros:
+        resultado.append({
+            'id': diametro.id,
+            'nombre': diametro.nombre,
+            'valor': diametro.valor
+        })
+    return jsonify(resultado)  # Retorna los diámetros en formato JSON
 
 
 if __name__ == '__main__':
