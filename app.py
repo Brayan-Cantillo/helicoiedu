@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, request
 from spring_module import *
 from fatigue_calc import *
-from database import db
+from database import db, Material, Diametro
+from faker import Faker
+import random
 
 # Compresión
 from Compresion.cas1Compresion import *
@@ -30,6 +32,12 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://heliedu:V29Wb4ULWsYczhywwNQYaeAeZPmTWwf2@dpg-crqbi9aj1k6c738e54d0-a:5432/heli'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Inicializa la extensión SQLAlchemy
+db.init_app(app)
+
+# Inicializa Faker
+fake = Faker()
 
 
 @app.route('/calculate', methods=['POST'])
@@ -116,6 +124,32 @@ def calculate():
             return jsonify({"error": f"Error en el cálculo: {str(e)}"}), 500
 
         return result
+
+
+@app.route('/insertar_datos')
+def insertar_datos():
+    # Crear algunos materiales
+    for _ in range(5):  # Cambia el rango según cuántos datos quieras
+        nombre_material = fake.unique.word()
+        A = random.uniform(1.0, 10.0)
+        B = random.uniform(1.0, 10.0)
+        nuevo_material = Material(nombre=nombre_material, A=A, B=B)
+        db.session.add(nuevo_material)
+
+    db.session.commit()
+
+    # Crear algunos diámetros vinculados a los materiales
+    materiales = Material.query.all()
+    for _ in range(10):  # Cambia el rango según cuántos diámetros quieras
+        nombre_diametro = fake.word()
+        material_id = random.choice(materiales).id
+        nuevo_diametro = Diametro(
+            nombre=nombre_diametro, material_id=material_id)
+        db.session.add(nuevo_diametro)
+
+    db.session.commit()
+
+    return "Datos aleatorios insertados correctamente."
 
 
 def create_tables():

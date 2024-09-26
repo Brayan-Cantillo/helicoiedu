@@ -14,3 +14,5 @@ pillow==10.4.0
 Werkzeug==3.0.4
 Flask-SQLAlchemy==3.0.2
 psycopg2-binary==2.9.6
+Faker==13.3.4
+
