@@ -126,7 +126,7 @@ def calculate():
         return result
 
 
-@app.route('/insertar_datos')
+@app.route('/insertar_datos', methods=['POST'])
 def insertar_datos():
     # Crear algunos materiales
     for _ in range(5):  # Cambia el rango según cuántos datos quieras
@@ -150,6 +150,20 @@ def insertar_datos():
     db.session.commit()
 
     return "Datos aleatorios insertados correctamente."
+
+
+@app.route('/materiales', methods=['GET'])
+def obtener_materiales():
+    materiales = Material.query.all()  # Obtener todos los materiales
+    resultado = []
+    for material in materiales:
+        resultado.append({
+            'id': material.id,
+            'nombre': material.nombre,
+            'A': material.A,
+            'B': material.B
+        })
+    return jsonify(resultado)  # Retorna los materiales en formato JSON
 
 
 def create_tables():
