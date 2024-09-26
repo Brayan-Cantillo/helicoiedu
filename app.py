@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from spring_module import *
 from fatigue_calc import *
+from database import db
 
 # Compresión
 from Compresion.cas1Compresion import *
@@ -26,6 +27,9 @@ from Torsion.cas4Torsion import *
 from Torsion.cas5Torsion import *
 
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://heliedu:V29Wb4ULWsYczhywwNQYaeAeZPmTWwf2@dpg-crqbi9aj1k6c738e54d0-a:5432/heli'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 @app.route('/calculate', methods=['POST'])
@@ -112,6 +116,10 @@ def calculate():
             return jsonify({"error": f"Error en el cálculo: {str(e)}"}), 500
 
         return result
+
+
+def create_tables():
+    db.create_all()
 
 
 if __name__ == '__main__':
