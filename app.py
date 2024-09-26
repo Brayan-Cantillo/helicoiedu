@@ -144,7 +144,7 @@ def insertar_datos():
         nombre_diametro = fake.word()
         material_id = random.choice(materiales).id
         nuevo_diametro = Diametro(
-            nombre=nombre_diametro, Valor=random.uniform(1.0, 10.0), material_id=material_id)
+            nombre=nombre_diametro, valor=random.uniform(1.0, 10.0), material_id=material_id)
         db.session.add(nuevo_diametro)
 
     db.session.commit()
