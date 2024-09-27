@@ -1,0 +1,142 @@
+[
+    {
+        "id": 1,
+        "nombre": "Diametro1",
+        "valor": 0.063
+    },
+    {
+        "id": 2,
+        "nombre": "Diametro2",
+        "valor": 0.067
+    },
+    {
+        "id": 3,
+        "nombre": "Diametro3",
+        "valor": 0.072
+    },
+    {
+        "id": 4,
+        "nombre": "Diametro4",
+        "valor": 0.076
+    },
+    {
+        "id": 5,
+        "nombre": "Diametro5",
+        "valor": 0.081
+    },
+    {
+        "id": 6,
+        "nombre": "Diametro6",
+        "valor": 0.085
+    },
+    {
+        "id": 7,
+        "nombre": "Diametro7",
+        "valor": 0.092
+    },
+    {
+        "id": 8,
+        "nombre": "Diametro8",
+        "valor": 0.098
+    },
+    {
+        "id": 9,
+        "nombre": "Diametro9",
+        "valor": 0.105
+    },
+    {
+        "id": 10,
+        "nombre": "Diametro10",
+        "valor": 0.112
+    },
+    {
+        "id": 11,
+        "nombre": "Diametro11",
+        "valor": 0.125
+    },
+    {
+        "id": 12,
+        "nombre": "Diametro12",
+        "valor": 0.135
+    },
+    {
+        "id": 13,
+        "nombre": "Diametro13",
+        "valor": 0.148
+    },
+    {
+        "id": 14,
+        "nombre": "Diametro14",
+        "valor": 0.162
+    },
+    {
+        "id": 15,
+        "nombre": "Diametro15",
+        "valor": 0.177
+    },
+    {
+        "id": 16,
+        "nombre": "Diametro16",
+        "valor": 0.192
+    },
+    {
+        "id": 17,
+        "nombre": "Diametro17",
+        "valor": 0.207
+    },
+    {
+        "id": 18,
+        "nombre": "Diametro18",
+        "valor": 0.225
+    },
+    {
+        "id": 19,
+        "nombre": "Diametro19",
+        "valor": 0.25
+    },
+    {
+        "id": 20,
+        "nombre": "Diametro20",
+        "valor": 0.281
+    },
+    {
+        "id": 21,
+        "nombre": "Diametro21",
+        "valor": 0.312
+    },
+    {
+        "id": 22,
+        "nombre": "Diametro22",
+        "valor": 0.343
+    },
+    {
+        "id": 23,
+        "nombre": "Diametro23",
+        "valor": 0.362
+    },
+    {
+        "id": 24,
+        "nombre": "Diametro24",
+        "valor": 0.375
+    },
+    {
+        "nombre": "Diametro25",
+        "valor": 0.389
+    },
+    {
+        "nombre": "Diametro26",
+        "valor": 0.392
+    },
+    {
+        "nombre": "Diametro27",
+        "valor": 0.378
+    },
+    {
+        "nombre": "Diametro28",
+        "valor": 0.386
+    },
+    {
+        "nombre": "Diametro29",
+        "valor": 0.395
+    }
+]

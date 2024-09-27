@@ -214,37 +214,51 @@ def obtener_diametros(material_id):
 def update_material(id):
     data = request.get_json()
 
-    if not data or 'nombre' not in data or 'A' not in data or 'B' not in data or 'diametros' not in data:
-        return jsonify({'error': 'Datos inválidos'}), 400
-
+    # Verificar si el material existe
     material = Material.query.get(id)
     if not material:
         return jsonify({'error': 'ID de material no encontrado'}), 404
 
-    # Actualizar campos del material
-    material.nombre = data['nombre']
-    material.A = data['A']
-    material.B = data['B']
+    # Actualizar campos opcionales
+    if 'nombre' in data:
+        material.nombre = data['nombre']
+    if 'A' in data:
+        material.A = data['A']
+    if 'B' in data:
+        material.B = data['B']
 
-    # Actualizar diámetros
-    diametros_data = data['diametros']
-    for diametro_data in diametros_data:
-        diametro = Diametro.query.get(diametro_data['id'])
-        if diametro:
-            diametro.nombre = diametro_data['nombre']
-            diametro.valor = diametro_data['valor']
-        else:
-            # Si no existe, puedes decidir si crear uno nuevo o ignorar
-            nuevo_diametro = Diametro(
-                nombre=diametro_data['nombre'], valor=diametro_data['valor'], material_id=id)
-            db.session.add(nuevo_diametro)
+    # Actualizar o crear diámetros
+    if 'diametros' in data:
+        diametros_data = data['diametros']
+        if not isinstance(diametros_data, list):
+            return jsonify({'error': 'El campo diametros debe ser una lista'}), 400
+
+        for diametro_data in diametros_data:
+            if 'id' not in diametro_data:
+                return jsonify({'error': 'Cada diámetro debe contener un id'}), 400
+
+            diametro = Diametro.query.get(diametro_data['id'])
+            if diametro:
+                if 'nombre' in diametro_data:
+                    diametro.nombre = diametro_data['nombre']
+                if 'valor' in diametro_data:
+                    diametro.valor = diametro_data['valor']
+            else:
+                # Si no existe, puedes decidir si crear uno nuevo o ignorar
+                if 'nombre' in diametro_data and 'valor' in diametro_data:
+                    nuevo_diametro = Diametro(
+                        nombre=diametro_data['nombre'],
+                        valor=diametro_data['valor'],
+                        material_id=id
+                    )
+                    db.session.add(nuevo_diametro)
 
     try:
         db.session.commit()
         return jsonify({'mensaje': 'Material y diámetros actualizados exitosamente'}), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': f'Error al actualizar: {str(e)}'}), 500
 
 
 @app.route('/crear_tablas', methods=['POST'])
