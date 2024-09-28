@@ -165,15 +165,15 @@ def case1Compresion(data):
         if comp_rel_pandeo > 4:
             return jsonify({"error": f"Diseño no favorable. El valor de la relación de pandeo ({comp_Ns_cierre}) es mayor que 4. El resorte podría pandearse."}), 400
 
+        fatiga_result = {}
         # Cálculos de fatiga, compresión caso 1.
         if Fatiga:
             fatiga_result = calcular_fatiga_compresion(
                 Fmax, Fmin, C, d, comp_D, comp_Sus, Tratamiento)
             result.update(fatiga_result)
 
-            comp_Nf = fatiga_result.get('Nf', None)
-
-        # Validación de resoltados de fatiga.
+        # type: ignore         # Validación de resoltados de fatiga.
+        comp_Nf = fatiga_result.get('Nf', None)
 
         if comp_Nf is not None and comp_Nf < 1:
             return jsonify({"error": f"Diseño no favorable. El Factor de seguridad Nf ({comp_Nf}) es menor que uno. Fallo por fatiga"}), 400
