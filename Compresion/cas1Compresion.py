@@ -171,9 +171,9 @@ def case1Compresion(data):
                 Fmax, Fmin, C, d, comp_D, comp_Sus, Tratamiento)
             result.update(fatiga_result)
 
-        # Validación de resoltados de fatiga.
+            comp_Nf = fatiga_result.get('Nf', None)
 
-        comp_Nf = fatiga_result.get('Nf', None)
+        # Validación de resoltados de fatiga.
 
         if comp_Nf is not None and comp_Nf < 1:
             return jsonify({"error": f"Diseño no favorable. El Factor de seguridad Nf ({comp_Nf}) es menor que uno. Fallo por fatiga"}), 400
