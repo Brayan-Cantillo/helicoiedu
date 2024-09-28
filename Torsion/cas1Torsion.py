@@ -1,6 +1,8 @@
 from flask import jsonify
 from spring_module import *
 from fatigue_calc import *
+from material_functions import *
+from diameter_functions import *
 
 
 def case1Torsion(data):
@@ -10,7 +12,7 @@ def case1Torsion(data):
     # Módulo de Corte (G)
     E = 30e6
 
-    required_fields = ['material', 'A', 'b', 'C', 'd', 'Mmax',
+    required_fields = ['material', 'C', 'd', 'Mmax',
                        'Mmin', 'theta', 'L1', 'L2', 'Tratamiento', 'Asentamiento', 'Fatiga']
 
     # Validaciones de campos requeridos
@@ -19,11 +21,28 @@ def case1Torsion(data):
             return jsonify({"error": f"El campo '{field}' es requerido para el caso seleccionado."}), 400
 
     try:
-        material = data['material']
-        A = float(data['A'])
-        b = float(data['b'])
+        # Obtener material desde la base de datos por ID
+        material = int(data['material'])
+        material_response = buscar_material_por_id(material)
+
+        if material_response.status_code != 200:
+            return material_response
+
+        material_data = material_response.json
+
+        # Obtener diámetro desde la base de datos por ID
+        diametro_id = int(data['d'])
+        diametro_response = buscar_diametro_por_id(diametro_id)
+
+        if diametro_response.status_code != 200:
+            return diametro_response
+
+        diametro_data = diametro_response.json
+
+        A = material_data['A']
+        B = material_data['B']
         C = float(data['C'])
-        d = float(data['d'])
+        d = diametro_data['valor']  # Usar el valor de d desde la base de datos
         Mmax = float(data['Mmax'])
         Mmin = float(data['Mmin'])
         theta = float(data['theta'])
@@ -64,7 +83,7 @@ def case1Torsion(data):
         tors_sigma_max_int = sigma_max_int(tors_Kbi, Mmax, d)
         tors_sigma_max_ext = sigma_max_ext(tors_Kbo, Mmax, d)
         tors_sigma_min_ext = sigma_min_ext(tors_Kbo, Mmin, d)
-        tors_Sut = Sut(d, A, b)
+        tors_Sut = Sut(d, A, B)
         tors_Sy = Sy_torsion(tors_Sut, material, asentamiento)
         tors_k = k_torsion(Mmax, Mmin, theta)
         tors_Na = Na_tor(d, E, tors_D, tors_k)
@@ -101,6 +120,7 @@ def case1Torsion(data):
         if tors_Nyb < 1:
             return jsonify({"error": f"Diseño no favorable. El Factor de seguridad Ns ({tors_Nyb}) es menor que uno. Fallo por carga estática"}), 400
 
+        fatiga_result = {}
         # Cálculos de fatiga, torsion caso 1.
         if Fatiga:
             fatiga_result = calcular_fatiga_torsion(

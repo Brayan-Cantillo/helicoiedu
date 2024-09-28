@@ -1,6 +1,24 @@
 from flask import jsonify
 from spring_module import *
 from fatigue_calc import *
+from material_functions import *
+from diameter_functions import *
+
+
+def buscar_diametro_por_id(diametro_id):
+    diametro = Diametro.query.get(diametro_id)
+
+    if not diametro:
+        return jsonify({"error": "Diámetro no encontrado."}), 404
+
+    resultado = {
+        'id': diametro.id,
+        'nombre': diametro.nombre,
+        'valor': diametro.valor,
+        'material_id': diametro.material_id
+    }
+
+    return jsonify(resultado)
 
 
 def case3Compresion(data):
@@ -9,7 +27,7 @@ def case3Compresion(data):
     # Módulo de Corte (G)
     G = 11.5e6
 
-    required_fields = ['material', 'A', 'b', 'C', 'd', 'ymax',
+    required_fields = ['material', 'C', 'd', 'ymax',
                        'ymin', 'k', 'Extremos', 'Tratamiento', 'Asentamiento', 'Fatiga']
 
     # Validaciones de campos requeridos
@@ -18,11 +36,28 @@ def case3Compresion(data):
             return jsonify({"error": f"El campo '{field}' es requerido para el caso seleccionado."}), 400
 
     try:
-        material = data['material']
-        A = float(data['A'])
-        b = float(data['b'])
+        # Obtener material desde la base de datos por ID
+        material = int(data['material'])
+        material_response = buscar_material_por_id(material)
+
+        if material_response.status_code != 200:
+            return material_response
+
+        material_data = material_response.json
+
+        # Obtener diámetro desde la base de datos por ID
+        diametro_id = int(data['d'])
+        diametro_response = buscar_diametro_por_id(diametro_id)
+
+        if diametro_response.status_code != 200:
+            return diametro_response
+
+        diametro_data = diametro_response.json
+
+        A = material_data['A']
+        B = material_data['B']
         C = float(data['C'])
-        d = float(data['d'])
+        d = diametro_data['valor']  # Usar el valor de d desde la base de datos
         ymax = float(data['ymax'])
         ymin = float(data['ymin'])
         k_value = float(data['k'])
@@ -66,7 +101,7 @@ def case3Compresion(data):
         comp_D = coil_diam(C, d)
         comp_Ks = Ks(C)
         comp_tau = tau(d, comp_D, comp_F_max_calc, comp_Ks)
-        comp_Sut = Sut(d, A, b)
+        comp_Sut = Sut(d, A, B)
         comp_Sys = Sys(comp_Sut, material, asentamiento)
         comp_Sus = Sus(comp_Sut)
         # Renombrado para evitar conflictos
@@ -136,6 +171,7 @@ def case3Compresion(data):
         if comp_rel_pandeo > 4:
             return jsonify({"error": f"Diseño no favorable. El valor de la relación de pandeo ({comp_Ns_cierre}) es mayor que 4. El resorte podría pandearse."}), 400
 
+        fatiga_result = {}
         # Cálculos de fatiga, compresión caso 3.
         if Fatiga:
             fatiga_result = calcular_fatiga_compresion(

@@ -1,6 +1,24 @@
 from flask import jsonify
 from spring_module import *
 from fatigue_calc import *
+from material_functions import *
+from diameter_functions import *
+
+
+def buscar_diametro_por_id(diametro_id):
+    diametro = Diametro.query.get(diametro_id)
+
+    if not diametro:
+        return jsonify({"error": "Diámetro no encontrado."}), 404
+
+    resultado = {
+        'id': diametro.id,
+        'nombre': diametro.nombre,
+        'valor': diametro.valor,
+        'material_id': diametro.material_id
+    }
+
+    return jsonify(resultado)
 
 
 def case1Extension(data):
@@ -9,7 +27,7 @@ def case1Extension(data):
     # Módulo de Corte (G)
     G = 11.5e6
 
-    required_fields = ['material', 'A', 'b', 'C1', 'C2', 'd',
+    required_fields = ['material',  'C1', 'C2', 'd',
                        'Fmax', 'Fmin', 'Deflexión', 'Fatiga']
 
     # Validaciones de campos requeridos
@@ -18,12 +36,29 @@ def case1Extension(data):
             return jsonify({"error": f"El campo '{field}' es requerido para el caso seleccionado."}), 400
 
     try:
-        material = data['material']
-        A = float(data['A'])
-        b = float(data['b'])
+        # Obtener material desde la base de datos por ID
+        material = int(data['material'])
+        material_response = buscar_material_por_id(material)
+
+        if material_response.status_code != 200:
+            return material_response
+
+        material_data = material_response.json
+
+        # Obtener diámetro desde la base de datos por ID
+        diametro_id = int(data['d'])
+        diametro_response = buscar_diametro_por_id(diametro_id)
+
+        if diametro_response.status_code != 200:
+            return diametro_response
+
+        diametro_data = diametro_response.json
+
+        A = material_data['A']
+        B = material_data['B']
         C1 = float(data['C1'])
         C2 = float(data['C2'])
-        d = float(data['d'])
+        d = diametro_data['valor']  # Usar el valor de d desde la base de datos
         Fmax = float(data['Fmax'])
         Fmin = float(data['Fmin'])
         y = float(data['Deflexión'])
@@ -58,7 +93,7 @@ def case1Extension(data):
         exten_Fi = Fi(d, exten_D, exten_taui, exten_Ks)
         exten_tau_min = tau_min_ex(d, exten_D, Fmin, exten_Ks)
         exten_tau_max = tau(d, exten_D, Fmax, exten_Ks)
-        exten_Sut = Sut(d, float(A), float(b))
+        exten_Sut = Sut(d, float(A), float(B))
         exten_Sus = Sus(exten_Sut)
         exten_Sys_cuerpo = Sys_ex_cuerpo(exten_Sut, material)
         exten_Sys_gancho = Sys_ex_gancho(exten_Sut)
@@ -121,6 +156,7 @@ def case1Extension(data):
         if exten_NB < 1:
             return jsonify({"error": f"Diseño no favorable. El Factor de seguridad Ns ({exten_NB}) es menor que uno. Fallo por carga estática del gancho por torsion"}), 400
 
+        fatiga_result = {}
         # Cálculos de fatiga, extension caso 1.
         if Fatiga:
             fatiga_result = calcular_fatiga_extension(
