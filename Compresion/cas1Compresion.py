@@ -68,7 +68,7 @@ def case1Compresion(data):
         return jsonify({"error": f"Error en los datos proporcionados: {str(e)}"}), 400
 
     # Validación de materiales
-    valid_materials = [1, 2, 3, 4, 5]
+    valid_materials = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     if material not in valid_materials:
         return jsonify({"error": f"El 'Material' seleccionado debe ser uno de los siguientes: {valid_materials}."}), 400
 
