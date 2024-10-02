@@ -22,12 +22,8 @@ def buscar_diametro_por_id(diametro_id):
 
 
 def case3Compresion(data):
-    global G
 
-    # Módulo de Corte (G)
-    G = 11.5e6
-
-    required_fields = ['material', 'C', 'd', 'ymax',
+    required_fields = ['sistema', 'material', 'C', 'd', 'ymax',
                        'ymin', 'k', 'Extremos', 'Tratamiento', 'Asentamiento', 'Fatiga']
 
     # Validaciones de campos requeridos
@@ -54,6 +50,7 @@ def case3Compresion(data):
 
         diametro_data = diametro_response.json
 
+        sistema = data['sistema']
         A = material_data['A']
         B = material_data['B']
         C = float(data['C'])
@@ -70,7 +67,7 @@ def case3Compresion(data):
         return jsonify({"error": f"Error en los datos proporcionados: {str(e)}"}), 400
 
         # Validación de materiales
-    valid_materials = [1, 2, 3, 4, 5]
+    valid_materials = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     if material not in valid_materials:
         return jsonify({"error": f"El 'Material' seleccionado debe ser uno de los siguientes: {valid_materials}."}), 400
 
@@ -93,6 +90,20 @@ def case3Compresion(data):
     valid_setting = [True, False]
     if asentamiento not in valid_setting:
         return jsonify({"error": f"La opción de fatiga seleccionada debe ser una de los siguientes: {valid_fatigue}."}), 400
+
+    # Validación opciones de sistema de unidades
+    valid_system = [True, False]
+    if sistema not in valid_system:
+        return jsonify({"error": f"El sistema seleccionado debe ser uno de los siguientes: {valid_system}."}), 400
+
+    global G
+
+    # Módulo de Corte (G)
+
+    if sistema == True:
+        G = 11.5e6
+    else:
+        G = 79300  # valor cambia a sistema internacional
 
     # Cálculos caso 2 compresión.
     try:
@@ -175,7 +186,7 @@ def case3Compresion(data):
         # Cálculos de fatiga, compresión caso 3.
         if Fatiga:
             fatiga_result = calcular_fatiga_compresion(
-                comp_F_max_calc, comp_F_min_calc, C, d, comp_D, comp_Sus, Tratamiento)
+                comp_F_max_calc, comp_F_min_calc, C, d, comp_D, comp_Sus, Tratamiento, sistema)
             result.update(fatiga_result)
 
         # Validación de resoltados de fatiga.

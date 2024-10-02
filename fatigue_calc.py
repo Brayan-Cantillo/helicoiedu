@@ -42,9 +42,12 @@ def calcular_fatiga_compresion(Fmax, Fmin, C, d, D, comp_Sus, Tratamiento, siste
     }
 
 
-def calcular_fatiga_extension(Fmax, Fmin, Ks, Kw, D, d, Sus, Kb, tau_min, Sut, C2):
+def calcular_fatiga_extension(Fmax, Fmin, Ks, Kw, D, d, Sus, Kb, tau_min, Sut, C2, sistema):
 
-    exten_Sew = 45.0e3
+    if sistema == True:
+        exten_Sew = 45.0e3
+    else:
+        exten_Sew = 310  # sistema internacional
 
     exten_Fa = Fa(Fmax, Fmin)
     exten_Fm = Fm(Fmax, Fmin)
@@ -89,12 +92,19 @@ def calcular_fatiga_extension(Fmax, Fmin, Ks, Kw, D, d, Sus, Kb, tau_min, Sut, C
     }
 
 
-def calcular_fatiga_torsion(Mmax, Mmin, C, sigma_max_int, sigma_max_ext, sigma_min_ext, Sut, Sy, Tratamiento):
+def calcular_fatiga_torsion(Mmax, Mmin, C, sigma_max_int, sigma_max_ext, sigma_min_ext, Sut, Sy, Tratamiento, sistema):
 
     if Tratamiento == 1:
-        tors_Sewb = 78e3
+        if sistema == True:
+            tors_Sewb = 78e3
+        else:
+            tors_Sewb = 537  # sistema internacional
+
     elif Tratamiento == 2:
-        tors_Sewb = 117e3
+        if sistema == True:
+            tors_Sewb = 117e3
+        else:
+            tors_Sewb = 806  # sistema internacional
 
     tors_Mm = Mm(Mmax, Mmin)
     tors_Ma = Ma(Mmax, Mmin)

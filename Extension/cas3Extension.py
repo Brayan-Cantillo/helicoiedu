@@ -27,7 +27,7 @@ def case3Extension(data):
     # Módulo de Corte (G)
     G = 11.5e6
 
-    required_fields = ['material', 'C1', 'C2',
+    required_fields = ['sistema', 'material', 'C1', 'C2',
                        'd', 'ymax', 'ymin', 'k', 'Fatiga']
 
     # Validaciones de campos requeridos
@@ -54,6 +54,7 @@ def case3Extension(data):
 
         diametro_data = diametro_response.json
 
+        sistema = data['sistema']
         A = material_data['A']
         B = material_data['B']
         C1 = float(data['C1'])
@@ -67,7 +68,7 @@ def case3Extension(data):
     except ValueError as e:
         return jsonify({"error": f"Error en los datos proporcionados: {str(e)}"}), 400
 
-    valid_materials = [1, 2, 3, 4, 5]
+    valid_materials = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
     if material not in valid_materials:
         return jsonify({"error": f"El 'Material' seleccionado debe ser uno de los siguientes: {valid_materials}."}), 400
@@ -76,6 +77,20 @@ def case3Extension(data):
     valid_fatigue = [True, False]
     if Fatiga not in valid_fatigue:
         return jsonify({"error": f"La opción de fatiga seleccionada debe ser una de los siguientes: {valid_fatigue}."}), 400
+
+    # Validación opciones de sistema de unidades
+    valid_system = [True, False]
+    if sistema not in valid_system:
+        return jsonify({"error": f"El sistema seleccionado debe ser uno de los siguientes: {valid_system}."}), 400
+
+    global G
+
+    # Módulo de Corte (G)
+
+    if sistema == True:
+        G = 11.5e6
+    else:
+        G = 79300  # valor cambia a sistema internacional
 
     # Cálculos caso 1 extensión.
     try:
@@ -160,7 +175,7 @@ def case3Extension(data):
         # Cálculos de fatiga, extension caso 3.
         if Fatiga:
             fatiga_result = calcular_fatiga_extension(
-                exten_F_max_calc, exten_F_min_calc, exten_Ks, exten_Kw, exten_D, d, exten_Sus, exten_Kb, exten_tau_min, exten_Sut, C2)
+                exten_F_max_calc, exten_F_min_calc, exten_Ks, exten_Kw, exten_D, d, exten_Sus, exten_Kb, exten_tau_min, exten_Sut, C2, sistema)
             result.update(fatiga_result)
 
          # Validación de resultados de fatiga.

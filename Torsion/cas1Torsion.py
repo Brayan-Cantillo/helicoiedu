@@ -7,12 +7,7 @@ from diameter_functions import *
 
 def case1Torsion(data):
 
-    global E
-
-    # Módulo de Corte (G)
-    E = 30e6
-
-    required_fields = ['material', 'C', 'd', 'Mmax',
+    required_fields = ['sistema', 'material', 'C', 'd', 'Mmax',
                        'Mmin', 'theta', 'L1', 'L2', 'Tratamiento', 'Asentamiento', 'Fatiga']
 
     # Validaciones de campos requeridos
@@ -39,6 +34,7 @@ def case1Torsion(data):
 
         diametro_data = diametro_response.json
 
+        sistema = data['sistema']
         A = material_data['A']
         B = material_data['B']
         C = float(data['C'])
@@ -56,7 +52,7 @@ def case1Torsion(data):
         return jsonify({"error": f"Error en los datos proporcionados: {str(e)}"}), 400
 
     # Validación de materiales
-    valid_materials = [1, 2, 3, 4, 5]
+    valid_materials = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     if material not in valid_materials:
         return jsonify({"error": f"El 'Material' seleccionado debe ser uno de los siguientes: {valid_materials}."}), 400
 
@@ -74,6 +70,20 @@ def case1Torsion(data):
     valid_setting = [True, False]
     if asentamiento not in valid_setting:
         return jsonify({"error": f"La opción de fatiga seleccionada debe ser una de los siguientes: {valid_fatigue}."}), 400
+
+    # Validación opciones de sistema de unidades
+    valid_system = [True, False]
+    if sistema not in valid_system:
+        return jsonify({"error": f"El sistema seleccionado debe ser uno de los siguientes: {valid_system}."}), 400
+
+    global E
+
+    # Módulo de Corte (E)
+
+    if sistema == True:
+        E = 30e6
+    else:
+        E = 206000  # valor cambia a sistema internacional
 
     # Cálculos caso 1 torsion.
     try:
@@ -124,7 +134,7 @@ def case1Torsion(data):
         # Cálculos de fatiga, torsion caso 1.
         if Fatiga:
             fatiga_result = calcular_fatiga_torsion(
-                Mmax, Mmin, C, tors_sigma_max_int, tors_sigma_max_ext, tors_sigma_min_ext, tors_Sut, tors_Sy, Tratamiento)
+                Mmax, Mmin, C, tors_sigma_max_int, tors_sigma_max_ext, tors_sigma_min_ext, tors_Sut, tors_Sy, Tratamiento, sistema)
             result.update(fatiga_result)
 
         # Validación de resoltados de fatiga.
