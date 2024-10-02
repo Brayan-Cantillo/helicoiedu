@@ -9,13 +9,13 @@ def calcular_fatiga_compresion(Fmax, Fmin, C, d, D, comp_Sus, Tratamiento, siste
         if sistema == True:
             comp_Sew = 45.0e3
         else:
-            comp_Sew = 310e6  # sistema internacional
+            comp_Sew = 310  # sistema internacional
 
     elif Tratamiento == 2:
         if sistema == True:
             comp_Sew = 67.5e3
         else:
-            comp_Sew = 465e6  # sistema internacional
+            comp_Sew = 465  # sistema internacional
 
     # Calcular los parámetros de fatiga
     comp_Fa = Fa(Fmax, Fmin)
