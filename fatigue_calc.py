@@ -1,14 +1,21 @@
 from spring_module import *
 
 
-def calcular_fatiga_compresion(Fmax, Fmin, C, d, D, comp_Sus, Tratamiento):
+def calcular_fatiga_compresion(Fmax, Fmin, C, d, D, comp_Sus, Tratamiento, sistema):
 
     # Asignar el valor de Sew basado en el tratamiento
 
     if Tratamiento == 1:
-        comp_Sew = 45.0e3
+        if sistema == True:
+            comp_Sew = 45.0e3
+        else:
+            comp_Sew = 310e6  # sistema internacional
+
     elif Tratamiento == 2:
-        comp_Sew = 67.5e3
+        if sistema == True:
+            comp_Sew = 67.5e3
+        else:
+            comp_Sew = 465e6  # sistema internacional
 
     # Calcular los parámetros de fatiga
     comp_Fa = Fa(Fmax, Fmin)

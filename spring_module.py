@@ -41,21 +41,21 @@ def Sys(Sut, material, asentamiento):
 
     if asentamiento == True:
 
-        if material == 1 or material == 2:
+        if material == 1 or material == 2 or material == 6 or material == 7:
 
             Sys = 0.60*Sut
 
-        elif material == 3 or material == 4 or material == 5:
+        elif material == 3 or material == 4 or material == 5 or material == 8 or material == 9 or material == 10:
 
             Sys = 0.65*Sut
 
     else:
 
-        if material == 1 or material == 2:
+        if material == 1 or material == 2 or material == 6 or material == 7:
 
             Sys = 0.45*Sut
 
-        elif material == 3 or material == 4 or material == 5:
+        elif material == 3 or material == 4 or material == 5 or material == 8 or material == 9 or material == 10:
 
             Sys = 0.50*Sut
 
