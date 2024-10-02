@@ -22,10 +22,6 @@ def buscar_diametro_por_id(diametro_id):
 
 
 def case3Extension(data):
-    global G
-
-    # Módulo de Corte (G)
-    G = 11.5e6
 
     required_fields = ['sistema', 'material', 'C1', 'C2',
                        'd', 'ymax', 'ymin', 'k', 'Fatiga']
