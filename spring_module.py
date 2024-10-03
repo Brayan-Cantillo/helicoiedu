@@ -434,11 +434,11 @@ def Sys_ex_cuerpo(Sut, material):
 
     """
 
-    if material == 1 or material == 2:
+    if material == 1 or material == 2 or material == 6 or material == 7:
 
         Sys_ex_cuerpo = 0.45*Sut
 
-    elif material == 3 or material == 4 or material == 5:
+    elif material == 3 or material == 4 or material == 5 or material == 8 or material == 9 or material == 10:
 
         Sys_ex_cuerpo = 0.50*Sut
 
@@ -759,11 +759,11 @@ def Sy_torsion(Sut, material, asentamiento):
 
     else:
 
-        if material == 1 or material == 2:
+        if material == 1 or material == 2 or material == 6 or material == 7:
 
             Sy = 0.80*Sut
 
-        elif material == 3 or material == 4 or material == 5:
+        elif material == 3 or material == 4 or material == 5 or material == 8 or material == 9 or material == 10:
 
             Sy = 0.85*Sut
 
