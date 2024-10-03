@@ -23,7 +23,7 @@ def buscar_diametro_por_id(diametro_id):
 
 def case4Compresion(data):
 
-    required_fields = ['sistema', 'material', 'A', 'b', 'C', 'd', 'Do_def', 'Lf_def', 'Fmax', 'Fmin',
+    required_fields = ['sistema', 'material', 'C', 'd', 'Do_def', 'Lf_def', 'Fmax', 'Fmin',
                        'k', 'Extremos', 'Tratamiento', 'Asentamiento', 'Fatiga']
 
     # Validaciones de campos requeridos
