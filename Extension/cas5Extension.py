@@ -159,7 +159,9 @@ def case5Extension(data):
             'Lb': exten_Lb,
             'long_ganchos': exten_long_ganchos,
             'Lf': exten_Lf,
-            'Kb': exten_Kb
+            'Kb': exten_Kb,
+            'y_cal': exten_y_calc
+
 
         }
 

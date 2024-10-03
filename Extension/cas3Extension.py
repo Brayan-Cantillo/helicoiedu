@@ -152,7 +152,8 @@ def case3Extension(data):
             'Di': exten_Di,
             'Lb': exten_Lb,
             'long_ganchos': exten_long_ganchos,
-            'Lf': exten_Lf
+            'Lf': exten_Lf,
+            'y_cal': exten_y_calc
 
 
         }
