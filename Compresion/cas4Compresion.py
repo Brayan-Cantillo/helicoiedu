@@ -154,6 +154,7 @@ def case4Compresion(data):
             'Sys': comp_Sys,
             'Ks': comp_Ks,
             'y_cal': comp_y_calculado,
+            'Nt': comp_Nt,
             'Sus': comp_Sus,
             'Ls': comp_Ls,
             'yinicial': comp_yinicial,

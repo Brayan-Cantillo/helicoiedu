@@ -149,6 +149,8 @@ def case2Compresion(data):
             'Sys': comp_Sys,
             'Ks': comp_Ks,
             'y': comp_y_calculado,
+            'Na': comp_Na,
+            'Nt': comp_Nt,
             'Sus': comp_Sus,
             'Ls': comp_Ls,
             'yinicial': comp_yinicial,

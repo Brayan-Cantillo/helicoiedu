@@ -155,6 +155,8 @@ def case3Compresion(data):
             'Ks': comp_Ks,
             'y': comp_y_new,
             'k': comp_k_new,
+            'Na': comp_Na,
+            'Nt': comp_Nt,
             'Sus': comp_Sus,
             'Ls': comp_Ls,
             'yinicial': comp_yinicial,
