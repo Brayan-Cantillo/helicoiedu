@@ -3,6 +3,7 @@ from spring_module import *
 from fatigue_calc import *
 from database import db, Material, Diametro
 from faker import Faker
+from flask_cors import CORS
 import random
 
 # Compresión
@@ -30,6 +31,7 @@ from Torsion.cas5Torsion import *
 
 app = Flask(__name__)
 
+CORS(app)  # permite cors para todas las rutas
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://heliedu:V29Wb4ULWsYczhywwNQYaeAeZPmTWwf2@dpg-crqbi9aj1k6c738e54d0-a:5432/heli'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
