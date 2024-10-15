@@ -146,14 +146,13 @@ def case3Extension(data):
             'NB': exten_NB,
             'Na': exten_Na,
             'k': exten_k_new,
-            'y_cal': exten_y_calc,
+            'y': exten_y_calc,
             'Nt': exten_Nt,
             'Do': exten_Do,
             'Di': exten_Di,
             'Lb': exten_Lb,
             'long_ganchos': exten_long_ganchos,
-            'Lf': exten_Lf,
-            'y_cal': exten_y_calc
+            'Lf': exten_Lf
 
 
         }

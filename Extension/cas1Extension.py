@@ -143,7 +143,7 @@ def case1Extension(data):
             'Ns': exten_Ns,
             'NA': exten_NA,
             'NB': exten_NB,
-            'kdef': exten_kdef,
+            'k': exten_kdef,
             'Na': exten_Na,
             'k': exten_k,
             'Nt': exten_Nt,

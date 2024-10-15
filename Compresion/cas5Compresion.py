@@ -178,7 +178,7 @@ def case5Compresion(data):
             'Ns': comp_Ns,
             'Ns cierre': comp_Ns_cierre,
             'Relación de Pandeo': comp_rel_pandeo,
-            'y_cal': comp_y_calculado
+            'y': comp_y_calculado
         }
 
         # Validación de resultados.

@@ -137,16 +137,16 @@ def case4Torsion(data):
             'Sut': tors_Sut,
             'Sy': tors_Sy,
             'theta': tors_theta,
-            'k_torsion': tors_k,
-            'k_def_tor': tors_k_def,
-            'Na_tor': tors_Na,
+            'k': tors_k,
+            'k': tors_k_def,
+            'Na': tors_Na,
             'Ne': tors_Ne,
             'Nb': tors_Nb,
             'theta_min': tors_theta_min,
             'theta_max': tors_theta_max,
             'Nyb': tors_Nyb,
             'Do': tors_Do,
-            'def_Di_min': tors_Di_min
+            'Di': tors_Di_min
 
 
         }

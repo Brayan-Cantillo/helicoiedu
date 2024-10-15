@@ -153,7 +153,7 @@ def case4Compresion(data):
             'Sut': comp_Sut,
             'Sys': comp_Sys,
             'Ks': comp_Ks,
-            'y_cal': comp_y_calculado,
+            'y': comp_y_calculado,
             'Nt': comp_Nt,
             'Sus': comp_Sus,
             'Ls': comp_Ls,

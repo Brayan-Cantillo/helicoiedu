@@ -121,12 +121,14 @@ def case3Torsion(data):
         tors_Ne = Ne(L1, L2, tors_D)
         tors_Nb = Nb(tors_Na, tors_Ne)
         tors_Nyb = Nyb(tors_Sy, tors_sigma_max_int)
+        tors_Do = Do(tors_D, d)
+        tors_Di_min = def_Di_min(tors_D, tors_Nb, tors_theta, d)
 
         result = {
 
             'D': tors_D,
-            'def_Mmax': tors_def_Mmax,
-            'def_Mmin': tors_def_Mmin,
+            'Mmax': tors_def_Mmax,
+            'Mmin': tors_def_Mmin,
             'Kbi': tors_Kbi,
             'Kbo': tors_Kbo,
             'sigma_max_int': tors_sigma_max_int,
@@ -135,12 +137,15 @@ def case3Torsion(data):
             'Sut': tors_Sut,
             'Sy': tors_Sy,
             'theta': tors_theta,
-            'k_torsion': tors_k,
-            'k_def_tor': tors_k_def,
-            'Na_tor': tors_Na,
+            'k': tors_k,
+            'k': tors_k_def,
+            'Na': tors_Na,
             'Ne': tors_Ne,
             'Nb': tors_Nb,
-            'Nyb': tors_Nyb
+            'Nyb': tors_Nyb,
+            'Do': tors_Do,
+            'Di': tors_Di_min
+
 
 
         }
