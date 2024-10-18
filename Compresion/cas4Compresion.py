@@ -174,16 +174,19 @@ def case4Compresion(data):
         }
 
         # Validación de resultados.
+          # Inicializamos una lista para acumular los errores.
 
+        errores = []
+
+           # Validación de resultados.
         if comp_Ns < 1:
-            return jsonify({"error": f"Diseño no favorable. El Factor de seguridad Ns ({comp_Ns}) es menor que uno. Fallo por carga estática"}), 400
+            errores.append(f"Diseño no favorable. El Factor de seguridad Ns ({comp_Ns}) es menor que uno. Fallo por carga estática.")
 
         if comp_Ns_cierre < 1:
-            return jsonify({"error": f"Diseño no favorable. El Factor de seguridad Ns ({comp_Ns_cierre}) es menor que uno. Fallo por carga estática en altura de cierre."}), 400
+            errores.append(f"Diseño no favorable. El Factor de seguridad Ns ({comp_Ns_cierre}) es menor que uno. Fallo por carga estática en altura de cierre.")
 
         if comp_rel_pandeo > 4:
-            return jsonify({"error": f"Diseño no favorable. El valor de la relación de pandeo ({comp_Ns_cierre}) es mayor que 4. El resorte podría pandearse."}), 400
-
+            errores.append(f"Diseño no favorable. El valor de la relación de pandeo ({comp_rel_pandeo}) es mayor que 4. El resorte podría pandearse.")
         fatiga_result = {}
         # Cálculos de fatiga, compresión caso 2.
         if Fatiga:
@@ -194,7 +197,14 @@ def case4Compresion(data):
         comp_Nf = fatiga_result.get('Nf', None)
 
         if comp_Nf is not None and comp_Nf < 1:
-            return jsonify({"error": f"Diseño no favorable. El Factor de seguridad Nf ({comp_Nf}) es menor que uno. Fallo por fatiga"}), 400
+            errores.append(f"Diseño no favorable. El Factor de seguridad Nf ({comp_Nf}) es menor que uno. Fallo por fatiga.")
+
+            # Si hay errores, los devolvemos como un JSON con código 400
+        if errores:
+            return jsonify({"errores": errores}), 400
+
+            # Si no hay errores, se puede proceder con el flujo normal.
+            # return jsonify({...}), 200
 
     except Exception as e:
         return jsonify({"error": f"Error en el cálculo: {str(e)}"}), 500

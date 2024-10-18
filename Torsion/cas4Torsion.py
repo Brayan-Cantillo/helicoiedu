@@ -152,8 +152,12 @@ def case4Torsion(data):
         }
 
         # Validación de resultados.
+        # Inicializamos una lista para acumular los errores.
+
+        errores = []
+
         if tors_Nyb < 1:
-            return jsonify({"error": f"Diseño no favorable. El Factor de seguridad Ns ({tors_Nyb}) es menor que uno. Fallo por carga estática"}), 400
+            errores.append(f"Diseño no favorable. El Factor de seguridad Ns ({tors_Nyb}) es menor que uno. Fallo por carga estática")
 
         fatiga_result = {}
        # Cálculos de fatiga, trosion caso 4.
@@ -161,6 +165,17 @@ def case4Torsion(data):
             fatiga_result = calcular_fatiga_torsion(
                 Mmax, Mmin, C, tors_sigma_max_int, tors_sigma_max_ext, tors_sigma_min_ext, tors_Sut, tors_Sy, Tratamiento, sistema)
             result.update(fatiga_result)
+
+        tors_Nfb = fatiga_result.get('Nfb', None)
+        if tors_Nfb is not None and tors_Nfb < 1:
+            errores.append(f"Diseño no favorable. El Factor de seguridad Nf ({tors_Nfb}) es menor que uno. Fallo por fatiga")
+                   
+         # Si hay errores, los devolvemos como un JSON con código 400
+        if errores:
+            return jsonify({"errores": errores}), 400
+
+            # Si no hay errores, se puede proceder con el flujo normal.
+            # return jsonify({...}), 200
 
     except Exception as e:
         return jsonify({"error": f"Error en el cálculo: {str(e)}"}), 500

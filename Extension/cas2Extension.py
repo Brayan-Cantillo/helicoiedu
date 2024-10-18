@@ -157,15 +157,19 @@ def case2Extension(data):
         }
 
         # Validación de resultados.
+          # Inicializamos una lista para acumular los errores.
 
+        errores = []
+
+           # Validación de resultados.
         if exten_Ns < 1:
-            return jsonify({"error": f"Diseño no favorable. El Factor de seguridad Ns ({exten_Ns}) es menor que uno. Fallo por carga estática"}), 400
+            errores.append(f"Diseño no favorable. El Factor de seguridad Ns ({exten_Ns}) es menor que uno. Fallo por carga estática.")
 
         if exten_NA < 1:
-            return jsonify({"error": f"Diseño no favorable. El Factor de seguridad Ns ({exten_NA}) es menor que uno. Fallo por carga estática del gancho por flexion"}), 400
+            errores.append(f"Diseño no favorable. El Factor de seguridad Ns ({exten_NA}) es menor que uno. Fallo por carga estática del gancho por flexion")
 
         if exten_NB < 1:
-            return jsonify({"error": f"Diseño no favorable. El Factor de seguridad Ns ({exten_NB}) es menor que uno. Fallo por carga estática del gancho por torsion"}), 400
+            errores.append(f"Diseño no favorable. El Factor de seguridad Ns ({exten_NB}) es menor que uno. Fallo por carga estática del gancho por torsion")
 
         fatiga_result = {}
         # Cálculos de fatiga, extension caso 2.
@@ -179,17 +183,23 @@ def case2Extension(data):
         comp_Nf = fatiga_result.get('Nf', None)
 
         if comp_Nf is not None and comp_Nf < 1:
-            return jsonify({"error": f"Diseño no favorable. El Factor de seguridad Nf ({comp_Nf}) es menor que uno. Fallo por fatiga"}), 400
+            errores.append(f"Diseño no favorable. El Factor de seguridad Nf ({comp_Nf}) es menor que uno. Fallo por fatiga")
 
         exten_NfgT = fatiga_result.get('NfgT', None)
 
         if exten_NfgT is not None and exten_NfgT < 1:
-            return jsonify({"error": f"Diseño no favorable. El Factor de seguridad NfgT ({exten_NfgT}) es menor que uno. Fallo por fatiga del gancho por torsion"}), 400
+            errores.append( f"Diseño no favorable. El Factor de seguridad NfgT ({exten_NfgT}) es menor que uno. Fallo por fatiga del gancho por torsion")
 
         exten_NfgF = fatiga_result.get('NfgF', None)
 
         if exten_NfgF is not None and exten_NfgF < 1:
-            return jsonify({"error": f"Diseño no favorable. El Factor de seguridad NfgF ({exten_NfgF}) es menor que uno. Fallo por fatiga del gancho por flexion"}), 400
+            errores.append( f"Diseño no favorable. El Factor de seguridad NfgF ({exten_NfgF}) es menor que uno. Fallo por fatiga del gancho por flexion")
+        
+        if errores:
+            return jsonify({"errores": errores}), 400
+        
+            # Si no hay errores, se puede proceder con el flujo normal.
+            # return jsonify({...}), 200
 
     except Exception as e:
         return jsonify({"error": f"Error en el cálculo: {str(e)}"}), 500
