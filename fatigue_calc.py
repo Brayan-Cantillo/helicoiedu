@@ -121,8 +121,8 @@ def calcular_fatiga_torsion(Mmax, Mmin, C, sigma_max_int, sigma_max_ext, sigma_m
         'Ma': tors_Ma,
         'sigma_medio_ext': tors_sigma_medio_ext,
         'sigma_alt_ext': tors_sigma_alt_ext,
-        'Se_tor': tors_Se,
-        'Nfb_tor': tors_Nfb,
+        'Se': tors_Se,
+        'Nfb': tors_Nfb,
         'Nyb': tors_Nyb,
         'Sewb': tors_Sewb
 
