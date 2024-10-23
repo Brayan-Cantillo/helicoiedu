@@ -188,14 +188,11 @@ def obtener_materiales():
     sistema = request.args.get('sistema', default='true')  # Obtén el sistema de unidades desde los parámetros de la URL
     materiales = Material.query.all()  # Filtrar los materiales por sistema de unidades
 
-    if len(materiales) >= 5:
-        if sistema:
+    if sistema:
             seleccionados = materiales[:5]  # Toma los primeros 5 materiales
-        else:
+    else:
             x = slice(5, 10)
             seleccionados = materiales[x]  # Toma los últimos 5 materiales
-    else:
-        seleccionados = materiales  # Si hay menos de 5, toma los que existan
 
     resultado = []
     for material in seleccionados:
