@@ -185,16 +185,28 @@ def insertar_datos():
 
 @app.route('/materiales', methods=['GET'])
 def obtener_materiales():
-    materiales = Material.query.all()  # Obtener todos los materiales
+    sistema = request.args.get('sistema', default='true')  # Obtén el sistema de unidades desde los parámetros de la URL
+    materiales = Material.query.filter_by(sistema_unidades=sistema).all()  # Filtrar los materiales por sistema de unidades
+
+    if len(materiales) >= 5:
+        if sistema:
+            seleccionados = materiales[:5]  # Toma los primeros 5 materiales
+        else:
+            seleccionados = materiales[-5:]  # Toma los últimos 5 materiales
+    else:
+        seleccionados = materiales  # Si hay menos de 5, toma los que existan
+
     resultado = []
-    for material in materiales:
+    for material in seleccionados:
         resultado.append({
             'id': material.id,
             'nombre': material.nombre,
             'A': material.A,
             'B': material.B
+            
         })
     return jsonify(resultado)  # Retorna los materiales en formato JSON
+
 
 
 # Ruta para obtener diámetros según el material
