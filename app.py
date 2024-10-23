@@ -186,7 +186,7 @@ def insertar_datos():
 @app.route('/materiales', methods=['GET'])
 def obtener_materiales():
     sistema = request.args.get('sistema', default='true')  # Obtén el sistema de unidades desde los parámetros de la URL
-    materiales = Material.query.filter_by(sistema_unidades=sistema).all()  # Filtrar los materiales por sistema de unidades
+    materiales = Material.query.all()  # Filtrar los materiales por sistema de unidades
 
     if len(materiales) >= 5:
         if sistema:
