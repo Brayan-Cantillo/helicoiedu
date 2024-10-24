@@ -189,9 +189,9 @@ def obtener_materiales():
     materiales = Material.query.all()  # Filtrar los materiales por sistema de unidades
 
     if sistema==True:
-            seleccionados = materiales[1, 2, 3, 4, 5]  # Toma los primeros 5 materiales
+            seleccionados = materiales([1, 2, 3, 4, 5])  # Toma los primeros 5 materiales
     else:
-            seleccionados = materiales[6, 7, 8, 9, 10]  # Toma los últimos 5 materiales
+            seleccionados = materiales([6, 7, 8, 9, 10])  # Toma los últimos 5 materiales
 
     resultado = []
     for material in seleccionados:
