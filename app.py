@@ -191,8 +191,7 @@ def obtener_materiales():
     if sistema:
             seleccionados = materiales[:5]  # Toma los primeros 5 materiales
     else:
-            x = slice(5, 10)
-            seleccionados = materiales[x]  # Toma los últimos 5 materiales
+            seleccionados = materiales[5:10]  # Toma los últimos 5 materiales
 
     resultado = []
     for material in seleccionados:
