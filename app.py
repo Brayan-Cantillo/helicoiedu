@@ -185,13 +185,14 @@ def insertar_datos():
 
 @app.route('/materiales', methods=['GET'])
 def obtener_materiales():
-    sistema = request.args.get('sistema', default='true')  # Obtén el sistema de unidades desde los parámetros de la URL
-    materiales = Material.query.all()  # Filtrar los materiales por sistema de unidades
+    sistema_str = request.args.get('sistema', default='true').lower()  # Obtener el valor de 'sistema' como string
+    sistema = sistema_str == 'true'  # Convertir a booleano, 'true' como True y 'false' como False
+    materiales = Material.query.all()  # Obtener todos los materiales desde la base de datos
 
     if sistema==True:
-            seleccionados = materiales([1, 2, 3, 4, 5])  # Toma los primeros 5 materiales
+            seleccionados = materiales[:5]  # Toma los primeros 5 materiales
     else:
-            seleccionados = materiales([6, 7, 8, 9, 10])  # Toma los últimos 5 materiales
+            seleccionados = materiales[5:10]  # Toma los últimos 5 materiales
 
     resultado = []
     for material in seleccionados:
