@@ -32,7 +32,7 @@ from Torsion.cas5Torsion import *
 app = Flask(__name__)
 
 CORS(app)  # permite cors para todas las rutas
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://heliedu:V29Wb4ULWsYczhywwNQYaeAeZPmTWwf2@dpg-crqbi9aj1k6c738e54d0-a:5432/heli'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://helicoiedu_owner:1pM9vNtkofHS@ep-calm-wave-a5unka2m.us-east-2.aws.neon.tech/helicoiedu?sslmode=require'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Inicializa la extensión SQLAlchemy
